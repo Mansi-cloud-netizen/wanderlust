@@ -102,11 +102,10 @@ require('dotenv').config();
     app.listen(port,()=>{
         console.log("app is listening");
     })
-    // app.get("/",(req,res)=>{
-    //     console.dir(res.cookie);
-    //     res.send("Root is working");
+    app.get("/",(req,res)=>{
+     res.redirect("/listings");
         
-    // })
+    })
     //signup-get request
     app.get("/signup",(req,res)=>{
         res.render("users/signup.ejs");
