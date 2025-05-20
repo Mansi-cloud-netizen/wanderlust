@@ -32,6 +32,10 @@ require('dotenv').config();
     const upload = multer({ storage })
     const MongoStore = require('connect-mongo');
 
+    const searchRoutes = require('./routes/search');
+    app.use('/api', searchRoutes);
+
+
     const dbUrl=process.env.ATLASDB_URL;
 
     const store=MongoStore.create({
@@ -106,6 +110,27 @@ require('dotenv').config();
      res.redirect("/listings");
         
     })
+
+    //serach-bar-GET
+app.get('/search', async (req, res) => {
+  try {
+    const query = req.query.query;
+
+    // Simple search: matches title or description
+    const results = await Listing.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } }
+      ]
+    });
+
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
     //signup-get request
     app.get("/signup",(req,res)=>{
         res.render("users/signup.ejs");

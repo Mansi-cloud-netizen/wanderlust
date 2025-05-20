@@ -19,12 +19,13 @@
           <a class="nav-link" href="/listings/new">Add new listing</a>
        
         </div>
-        <div class="search-bar ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-input" type="search" placeholder="Search destinations" >
+        <form class="d-flex" role="search" onsubmit="event.preventDefault(); search();">
+           <input id="searchInput" class="form-control me-2 search-input" type="search" placeholder="Search destinations">
             <button class="btn btn-search" type="submit">Search</button>
-          </form>
-        </div>
+        </form>
+        <div id="results" class="mt-3"></div>
+
+
         <div class="navbar-nav ms-auto">
           <% if(!currUser){%>
             <a class="nav-link"  href="/signup"><b>Signup</b></a>
@@ -37,3 +38,25 @@
       </div>
     </div>
   </nav>
+
+  <script>
+  async function search() {
+    const query = document.getElementById('searchInput').value;
+    const res = await fetch(`/search?query=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    const resultsDiv = document.getElementById('results');
+    if (data.length === 0) {
+      resultsDiv.innerHTML = "<p>No results found.</p>";
+      return;
+    }
+
+    resultsDiv.innerHTML = data.map(item => `
+      <div class="card my-2 p-3">
+        <h5>${item.title}</h5>
+        <p>${item.description}</p>
+        <a href="/listings/${item._id}" class="btn btn-sm btn-primary">View Listing</a>
+      </div>
+    `).join('');
+  }
+</script>
