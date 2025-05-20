@@ -113,20 +113,27 @@ app.get('/search', async (req, res) => {
   try {
     const query = req.query.query;
 
-    // Simple search: matches title or description
-    const results = await Listing.find({
+    const result = await Listing.findOne({
       $or: [
         { title: { $regex: query, $options: 'i' } },
-        { description: { $regex: query, $options: 'i' } }
+        { description: { $regex: query, $options: 'i' } },
+        { location: { $regex: query, $options: 'i' } }
       ]
     });
 
-    res.json(results);
+    if (result) {
+      return res.redirect(`/listings/${result._id}`);
+    } else {
+      req.flash('error', 'No matching listing found.');
+      return res.redirect('/listings'); // or wherever you want
+    }
+
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
   }
 });
+
 
     //signup-get request
     app.get("/signup",(req,res)=>{
