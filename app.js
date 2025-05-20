@@ -32,9 +32,6 @@ require('dotenv').config();
     const upload = multer({ storage })
     const MongoStore = require('connect-mongo');
 
-    const searchRoutes = require('./routes/search');
-    app.use('/api', searchRoutes);
-
 
     const dbUrl=process.env.ATLASDB_URL;
 
