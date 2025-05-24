@@ -1,10 +1,12 @@
 <style>
-  .search-bar button{
+   #search-btn{
     background-color: #FF5A5F;
     color:white;
+    margin-left: 40px;
   }
-  .search-input{
+  #search-input{
     padding:0.5rem 3rem 0.5rem 3rem;
+    margin-left: 30px;
   }
 </style>
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
@@ -19,9 +21,9 @@
           <a class="nav-link" href="/listings/new">Add new listing</a>
        
         </div>
-       <form class="d-flex ml-30" role="search" action="/search" method="get">
-           <input name="query" class="form-control me-2 search-input" type="search" placeholder="Search destinations">
-            <button class="search-bar" type="submit">Search</button>
+       <form class="d-flex" role="search" action="/search" method="get">
+           <input name="query" class="form-control me-2 search-input" id="search-input" type="search" placeholder="Search destinations">
+            <button class="btn btn-search" id="search-btn" type="submit">Search</button>
         </form>
   
         <div class="navbar-nav ms-auto">
