@@ -33,12 +33,12 @@ require('dotenv').config();
     const MongoStore = require('connect-mongo');
 
 
-    const dbUrl=process.env.ATLASDB_URL;
+    const dbUrl='mongodb://127.0.0.1:27017/wanderlust';
 
     const store=MongoStore.create({
         mongoUrl:dbUrl,
         crypto:{
-            secret:process.env.SECRET,
+            secret:"thisissecret",
         },
         touchAfter:24*3600,
     })
@@ -48,7 +48,7 @@ require('dotenv').config();
 
     const sessionOptions={
         store,
-        secret:process.env.SECRET,
+        secret:"thisissecret",
         resave:false,
         saveUninitialized:false,
         cookie:{
@@ -183,23 +183,15 @@ app.get('/search', async (req, res) => {
             res.redirect("/listings");
         })
     })
-    // app.get("/testlisting",async (req,res)=>{
-    //     let sampleListing=new Listing({
-    //         title: "New Villa",
-    //         description: "By the beach",
-    //         price:1200,
-    //         location:"Calangute, Goa",
-    //         country:"India"
-    //     })
-    //    await sampleListing.save();
-    //         console.log("Sample was saved");
-    //         res.send("Succesful");
-    
-    // })
+
     app.get("/listings",wrapAsync(async (req,res)=>{
         const allListings=await Listing.find({})
         res.render("listings/index.ejs",{allListings});
         }));
+
+        app.get("/listings/trending",(req,res)=>{
+            res.render("trending.ejs");
+        })
 
 
     app.get("/listings/new",(req,res)=>{
@@ -231,11 +223,6 @@ app.get('/search', async (req, res) => {
             req.flash("error","New listing created");
             res.redirect("/listings");
         }));
-// //upload image check
-// app.post("/listings",,(req,res)=>{
-//     res.send(req.file);
-// })
-
 
     app.get("/listings/:id/edit",wrapAsync(async (req,res)=>{
         if(!req.isAuthenticated()){
