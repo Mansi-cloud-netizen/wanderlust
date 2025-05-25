@@ -191,7 +191,7 @@ app.get('/search', async (req, res) => {
 
         app.get("/listings/trending",wrapAsync(async(req,res)=>{
              const allListings=await Listing.find({})
-            res.render("listings/trending.ejs");
+            res.render("listings/trending.ejs",{allListings});
         }));
 
 
