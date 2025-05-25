@@ -189,9 +189,10 @@ app.get('/search', async (req, res) => {
         res.render("listings/index.ejs",{allListings});
         }));
 
-        app.get("/listings/trending",(req,res)=>{
-            res.render("trending.ejs");
-        })
+        app.get("/listings/trending",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/trending.ejs");
+        }));
 
 
     app.get("/listings/new",(req,res)=>{
