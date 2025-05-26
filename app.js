@@ -33,12 +33,12 @@ require('dotenv').config();
     const MongoStore = require('connect-mongo');
 
 
-    const dbUrl='mongodb://127.0.0.1:27017/wanderlust';
+    const dbUrl=process.env.ATLASDB_URL;
 
     const store=MongoStore.create({
         mongoUrl:dbUrl,
         crypto:{
-            secret:"thisissecret",
+            secret:process.env.SECRET,
         },
         touchAfter:24*3600,
     })
@@ -93,7 +93,7 @@ require('dotenv').config();
 
 
     async function main(){
-        await mongoose.connect(dbUrl);
+        await mongoose.connect(process.env.ATLASDB_URL);
     }
     main().then((res)=>{
         console.log("connected to DB");
@@ -194,6 +194,36 @@ app.get('/search', async (req, res) => {
             res.render("listings/trending.ejs",{allListings});
         }));
 
+        app.get("/listings/rooms",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/room.ejs",{allListings});
+        }));
+
+         app.get("/listings/mountains",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/mountain.ejs",{allListings});
+        }));
+
+         app.get("/listings/castles",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/castles.ejs",{allListings});
+        }));
+
+        app.get("/listings/pools",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/pools.ejs",{allListings});
+        }));
+
+        app.get("/listings/farms",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/farms.ejs",{allListings});
+        }));
+
+        app.get("/listings/arctic",wrapAsync(async(req,res)=>{
+             const allListings=await Listing.find({})
+            res.render("listings/arctic.ejs",{allListings});
+        }));
+
 
     app.get("/listings/new",(req,res)=>{
         if(!req.isAuthenticated()){
@@ -288,14 +318,4 @@ app.get('/search', async (req, res) => {
         req.flash("success","Review deleted");
         res.redirect(`/listings/${id}`);
     }))
-
-    
-    // app.all("*",(req,res,next)=>{
-    //     next(new ExError(404,"Page not found"));
-    // })
-    // app.use((err,req,res,next)=>{
-    //     let {statusCode=500 ,message="Something went Wrong!!"}=err;
-    //     res.status(statusCode).render("error.ejs",{message});
-    //     // res.status(statusCode).send(message);
-    // })
 
